@@ -1,11 +1,11 @@
 Option:
 
 -   Only run Web App using Docker Image (tanpa source code):
-    -   Repository: `https://github.com/221110019/devOps-compose.git`
+    -   Repository: `https://github.com/221110019/CatCanine-full.git`
 -   With Project Source Code using Laravel Sail
-    -   Repository: `https://github.com/221110019/devOps.git`
+    -   Repository: `https://github.com/221110019/CatCanine-ViewOnly.git`
 
-# General Instalation Window:
+# General Installation (Window):
 
 -   Docker Desktop with WSL2 engine integration enabled
 -   WSL2 engine (sebaiknya Ubuntu)
@@ -19,7 +19,7 @@ Option:
 -   (opsional) cd ke path folder
 
 ```bash
-git clone https://github.com/221110019/devOps-compose.git
+git clone https://github.com/221110019/CatCanine-ViewOnly.git
 ```
 
 -   cd ke folder clone
@@ -66,7 +66,7 @@ docker system prune -a -f
 -   Locate ke path folder
 
 ```bash
-git clone https://github.com/221110019/devOps.git
+git clone https://github.com/221110019/CatCanine-full.git
 ```
 
 -   cd ke folder clone
@@ -116,3 +116,5 @@ sail up -d
 ./vendor/bin/sail artisan db:seed
 ./vendor/bin/sail artisan storage:link
 ```
+# CI/CD
+> Triggered by push to master
