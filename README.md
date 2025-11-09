@@ -7,7 +7,7 @@
 
 # Requirement (Window)
 
--   Docker Desktop with WSL2 engine integration enabled
+-   Docker Desktop running with WSL2 integration enabled
 -   WSL2 engine (sebaiknya Ubuntu)
 -   Sebaiknya run command dengan terminal Ubuntu (bukan Powershell etc), performa lebih cepat
 
@@ -35,8 +35,6 @@ docker compose pull
 docker compose up
 atau
 docker compose up -d
-atau
-docker-compose up -d && docker-compose logs -f laravel.test-1`
 ```
 
 -   Akses web app di http://localhost
