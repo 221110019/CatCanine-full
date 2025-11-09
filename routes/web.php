@@ -19,5 +19,3 @@ Route::middleware('auth')->group(function () {
 
 
 Route::redirect('/', '/login');
-// Route::view('/moderator-panel', 'moderator-panel')->name('moderator.panel');
-// Route::view('/master-panel', 'livewire.master-panel')->name('master.panel');
