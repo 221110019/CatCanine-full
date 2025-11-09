@@ -1,9 +1,10 @@
 # Option:
 
 -   Only run Web App using Docker Image (ViewOnly, tanpa source code):
-    -   Repository: `https://github.com/221110019/CatCanine-full.git`
+   -   Repository: `https://github.com/221110019/CatCanine-ViewOnly.git`
 -   With Project Source Code + using Laravel Sail to integrate with Docker
-    -   Repository: `https://github.com/221110019/CatCanine-ViewOnly.git`
+    
+    -   Repository: `https://github.com/221110019/CatCanine-full.git`
 
 # Requirement (Window)
 
