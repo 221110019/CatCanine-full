@@ -8,8 +8,6 @@ import {
     CircleX,
     createIcons,
     Dog,
-    EllipsisVertical,
-    ImagePlus,
     KeyRound,
     LogIn,
     LogOut,
@@ -17,7 +15,6 @@ import {
     Megaphone,
     Moon,
     PawPrint,
-    Send,
     Sun,
     UserRoundPlus,
 } from "lucide";
@@ -33,11 +30,8 @@ createIcons({
         KeyRound,
         AtSign,
         Megaphone,
-        ImagePlus,
         LogOut,
         CircleX,
-        Send,
-        EllipsisVertical,
         PawPrint,
         Bone,
         ArrowUpToLine,
@@ -56,4 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem("theme") || "business";
     document.documentElement.setAttribute("data-theme", savedTheme);
     document.querySelector(".theme-controller").checked = savedTheme === "nord";
+});
+
+document.addEventListener("livewire:init", () => {
+    Livewire.hook("element.updated", () => {
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    });
 });

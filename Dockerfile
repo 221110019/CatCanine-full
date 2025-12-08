@@ -1,4 +1,5 @@
 FROM ubuntu:24.04
+# FROM ubuntu:24.04-slim
 
 WORKDIR /var/www/html
 
