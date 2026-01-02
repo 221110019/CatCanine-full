@@ -1,13 +1,14 @@
-Option:
+# Option:
 
--   Only run Web App using Docker Image (tanpa source code):
+-   Only run Web App using Docker Image (ViewOnly, tanpa source code):
+       -   Repository: `https://github.com/221110019/CatCanine-ViewOnly.git`
+-   With Project Source Code + using Laravel Sail to integrate with Docker
+    
     -   Repository: `https://github.com/221110019/CatCanine-full.git`
--   With Project Source Code using Laravel Sail
-    -   Repository: `https://github.com/221110019/CatCanine-ViewOnly.git`
 
-# General Installation (Window):
+# Requirement (Window)
 
--   Docker Desktop with WSL2 engine integration enabled
+-   Docker Desktop running with WSL2 integration enabled
 -   WSL2 engine (sebaiknya Ubuntu)
 -   Sebaiknya run command dengan terminal Ubuntu (bukan Powershell etc), performa lebih cepat
 
@@ -35,8 +36,6 @@ docker compose pull
 docker compose up
 atau
 docker compose up -d
-atau
-docker-compose up -d && docker-compose logs -f laravel.test-1`
 ```
 
 -   Akses web app di http://localhost
@@ -116,5 +115,7 @@ sail up -d
 ./vendor/bin/sail artisan db:seed
 ./vendor/bin/sail artisan storage:link
 ```
+
 # CI/CD
+
 > Triggered by push to master

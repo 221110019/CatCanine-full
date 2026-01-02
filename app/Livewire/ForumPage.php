@@ -3,17 +3,25 @@
 namespace App\Livewire;
 
 use App\Models\Post;
+<<<<<<< HEAD
 use App\Models\PostReport;
 use App\Models\UserReport;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
+=======
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
 use Illuminate\Support\Facades\Storage;
 
 class ForumPage extends Component
 {
     use WithFileUploads;
 
+<<<<<<< HEAD
     public $filter = 'recent';
     public $search = "";
     public $editingPostId = null;
@@ -60,6 +68,85 @@ class ForumPage extends Component
         }
 
         return $query->get();
+=======
+    public $posts = [];
+    public $picture = null;
+    public $newComment = [];
+    public $editingPostId = null;
+    public $editingCaption = '';
+    public $filter = 'recent';
+
+    protected $listeners = [
+        'postAdded' => 'loadPosts',
+        'postLiked' => 'syncPostLike',
+        'commentAdded' => 'refreshPostComments',
+    ];
+
+    public function mount()
+    {
+        $this->loadPosts();
+    }
+
+    public function render()
+    {
+        return view('livewire.forum-page');
+    }
+
+    public function updatedFilter()
+    {
+        $this->loadPosts();
+    }
+
+    public function setFilter($type)
+    {
+        $this->filter = $type;
+        $this->loadPosts();
+    }
+
+
+    public function loadPosts()
+    {
+        $query = Post::with(['user', 'comments.user', 'likes'])
+            ->withCount(['likes', 'comments']);
+
+        if ($this->filter === 'own') {
+            $query->where('user_id', Auth::id());
+        } elseif ($this->filter === 'popular') {
+            $query->orderByDesc('likes_count')->orderByDesc('comments_count');
+        } else {
+            $query->latest();
+        }
+
+        $this->posts = $query->get()->map(fn($post) => tap($post, function ($p) {
+            $p->canEdit = $p->user_id === Auth::id();
+            $p->canDelete = $p->user_id === Auth::id();
+        }));
+    }
+
+
+    public function syncPostLike($payload)
+    {
+        foreach ($this->posts as $p) {
+            if ($p->id === $payload['postId']) {
+                $p->likes_count = $payload['likesCount'];
+                break;
+            }
+        }
+    }
+
+    public function refreshPostComments($postId)
+    {
+        foreach ($this->posts as $index => $post) {
+            if ($post->id == $postId) {
+                $this->posts[$index] = Post::with(['user', 'comments.user', 'likes'])
+                    ->withCount(['likes', 'comments'])
+                    ->find($postId);
+                $this->posts[$index]->canEdit = $post->user_id === Auth::id();
+                $this->posts[$index]->canDelete = $post->user_id === Auth::id();
+                break;
+            }
+        }
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
     }
 
     public function editPost($postId)
@@ -76,15 +163,19 @@ class ForumPage extends Component
         $post = Post::findOrFail($postId);
         if ($post->user_id !== Auth::id()) return;
 
+<<<<<<< HEAD
         if (trim($this->editingCaption) === trim($post->caption)) {
             $this->cancelEdit();
             return;
         }
 
+=======
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
         $this->validate([
             'editingCaption' => 'required|max:120',
         ]);
 
+<<<<<<< HEAD
         $post->update([
             'caption' => $this->editingCaption
         ]);
@@ -93,12 +184,20 @@ class ForumPage extends Component
     }
 
 
+=======
+        $post->update(['caption' => $this->editingCaption]);
+        $this->cancelEdit();
+        $this->loadPosts();
+    }
+
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
     public function cancelEdit()
     {
         $this->editingPostId = null;
         $this->editingCaption = '';
     }
 
+<<<<<<< HEAD
     public function archivePost($postId)
     {
         $post = Post::find($postId);
@@ -106,10 +205,22 @@ class ForumPage extends Component
 
         $post->update(['status' => 'archived']);
         $this->dispatch('$refresh');
+=======
+    public function deletePost($postId)
+    {
+        Log::info("Delete clicked for post: {$postId}");
+        $post = Post::find($postId);
+        if (!$post || $post->user_id !== Auth::id()) return;
+
+        if ($post->picture) Storage::disk('public')->delete($post->picture);
+        $post->delete();
+        $this->loadPosts();
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
     }
 
     public function reportPost($postId)
     {
+<<<<<<< HEAD
         $post = Post::find($postId);
         if (!$post) return;
         if ($post->user_id === Auth::id()) return;
@@ -152,5 +263,13 @@ class ForumPage extends Component
 
         session()->flash('message', 'User reported.');
         $this->dispatch('$refresh');
+=======
+        session()->flash('message', 'Post has been reported to administrators.');
+    }
+
+    public function removeImage()
+    {
+        $this->picture = null;
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
     }
 }
