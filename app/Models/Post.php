@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
@@ -13,16 +14,20 @@ class Post extends Model
         'user_id',
         'caption',
         'picture',
+        'type',
         'likes_count',
         'reports_count',
+        'status',
     ];
+
 
     protected $casts = [
         'likes_count' => 'integer',
         'reports_count' => 'integer',
     ];
 
-    protected $with = ['user', 'comments'];
+    protected $with = ['user', 'comments', 'userReports'];
+
 
     public function likes()
     {
@@ -37,12 +42,24 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
-    protected static function booted()
+    public function reporters()
     {
-        static::deleting(function ($post) {
-            if ($post->picture) {
-                Storage::disk('public')->delete($post->picture);
-            }
-        });
+        return $this->hasMany(PostReport::class);
+    }
+    protected $appends = ['canDelete'];
+
+    public function getCanDeleteAttribute()
+    {
+        if (!Auth::check()) return false;
+
+        return Auth::id() === $this->user_id;
+    }
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    public function userReports()
+    {
+        return $this->hasMany(UserReport::class, 'post_id');
     }
 }

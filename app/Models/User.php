@@ -23,7 +23,6 @@ class User extends Authenticatable
     ];
     protected $casts = [
         'email_verified_at' => 'datetime',
-        // 'password' => 'hashed',
         'is_banned' => 'boolean',
     ];
 
@@ -44,5 +43,19 @@ class User extends Authenticatable
     public function isBanned(): bool
     {
         return $this->is_banned;
+    }
+    public function isReportable(): bool
+    {
+        return !$this->isMaster();
+    }
+
+    public function reportsMade()
+    {
+        return $this->hasMany(UserReport::class, 'reporter_id');
+    }
+
+    public function reportsReceived()
+    {
+        return $this->hasMany(UserReport::class, 'reported_id');
     }
 }

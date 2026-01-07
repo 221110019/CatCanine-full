@@ -2,6 +2,10 @@
 
 namespace App\Livewire\Auth;
 
+<<<<<<< HEAD
+use Illuminate\Http\Request;
+=======
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
 use Livewire\Component;
 
 class RegisterForm extends Component
@@ -20,7 +24,11 @@ class RegisterForm extends Component
     {
         $this->validate();
 
+<<<<<<< HEAD
+        $internal = Request::create('/api/register', 'POST', [
+=======
         $internal = \Illuminate\Http\Request::create('/api/register', 'POST', [
+>>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password,
