@@ -17,11 +17,13 @@
     @livewireStyles
 </head>
 
-<body class="flex justify-center items-center min-h-screen">
-    <div class="w-full max-w-md">
+<body class="flex justify-center items-center">
+    <div class="w-full max-w-md  min-h-screen">
         <x-forum-navbar></x-forum-navbar>
-        <livewire:forum-create-post />
-        <x-forum-post-filter />
+        {{-- <livewire:forum-create-post /> --}}
+        <div class="divider divider-primary w-full">
+            <x-lucid iconName="paw-print" />
+        </div>
         @yield('content')
         <x-top-button />
         <x-toast-alert></x-toast-alert>

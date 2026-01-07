@@ -11,25 +11,25 @@ class PostLikeSeeder extends Seeder
 {
     public function run(): void
     {
-        $users = User::pluck('id');
-        $posts = Post::pluck('id');
+        $users = User::pluck('id')->toArray();
 
-        $likes = collect();
+        Post::query()->chunk(50, function ($posts) use ($users) {
+            foreach ($posts as $post) {
+                $likeUsers = collect($users)
+                    ->shuffle()
+                    ->take(rand(3, min(10, count($users))));
 
-        while ($likes->count() < 100) {
-            $user_id = $users->random();
-            $post_id = $posts->random();
+                foreach ($likeUsers as $userId) {
+                    PostLike::firstOrCreate([
+                        'user_id' => $userId,
+                        'post_id' => $post->id,
+                    ]);
+                }
 
-            if (!$likes->contains(fn($like) => $like['user_id'] === $user_id && $like['post_id'] === $post_id)) {
-                $likes->push([
-                    'user_id' => $user_id,
-                    'post_id' => $post_id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                $post->update([
+                    'likes_count' => PostLike::where('post_id', $post->id)->count(),
                 ]);
             }
-        }
-
-        PostLike::insert($likes->toArray());
+        });
     }
 }

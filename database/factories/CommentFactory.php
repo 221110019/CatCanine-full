@@ -20,13 +20,40 @@ class CommentFactory extends Factory
 
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first();
-        $post = Post::inRandomOrder()->first();
+        $user = User::inRandomOrder()->firstOrFail();
+        $post = Post::inRandomOrder()->firstOrFail();
+
+        $support = [
+            'Yeah, I’ve seen the same with my pet.',
+            '100% agree. This matches my experience.',
+            'Glad someone finally said this.',
+            'This actually worked for me too.',
+        ];
+
+        $attack = [
+            'I don’t think that’s accurate.',
+            'That hasn’t been true in my case.',
+            'I strongly disagree with this take.',
+            'That sounds more like a myth.',
+        ];
+
+        $neutral = [
+            'It really depends on the animal.',
+            'Every pet reacts differently.',
+            'Interesting point, not sure I fully agree.',
+        ];
+
+
+        $content = match (fake()->randomElement(['support', 'attack', 'neutral'])) {
+            'support' => fake()->randomElement($support),
+            'attack' => fake()->randomElement($attack),
+            default => fake()->randomElement($neutral),
+        };
 
         return [
-            'user_id' => $user?->id ?? User::factory(),
-            'post_id' => $post?->id ?? Post::factory(),
-            'content' => $this->faker->realTextBetween(10, 100),
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+            'content' => $content,
         ];
     }
 }

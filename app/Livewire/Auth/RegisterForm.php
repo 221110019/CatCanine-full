@@ -2,10 +2,14 @@
 
 namespace App\Livewire\Auth;
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 use Illuminate\Http\Request;
 =======
 >>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
+=======
+use Illuminate\Http\Request;
+>>>>>>> Stashed changes
 use Livewire\Component;
 
 class RegisterForm extends Component
@@ -24,11 +28,15 @@ class RegisterForm extends Component
     {
         $this->validate();
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         $internal = Request::create('/api/register', 'POST', [
 =======
         $internal = \Illuminate\Http\Request::create('/api/register', 'POST', [
 >>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
+=======
+        $internal = Request::create('/api/register', 'POST', [
+>>>>>>> Stashed changes
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password,

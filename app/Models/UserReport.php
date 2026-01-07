@@ -11,4 +11,16 @@ class UserReport extends Model
         'reported_id',
         'post_id',
     ];
+<<<<<<< Updated upstream
+=======
+    public function reporter()
+    {
+        return $this->belongsTo(User::class, 'reporter_id');
+    }
+
+    public function reportedUser()
+    {
+        return $this->belongsTo(User::class, 'reported_id');
+    }
+>>>>>>> Stashed changes
 }

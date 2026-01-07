@@ -2,7 +2,9 @@
     user: {
         name: '{{ Auth::user()->name }}',
         role: '{{ Auth::user()->role }}'
-    }
+    },
+
+    currentRoute: '{{ request()->route()->getName() }}'
 }">
     <div class="navbar bg-ghost shadow-sm px-4 w-full">
         <div class="flex-1 gap-4">
@@ -10,29 +12,35 @@
         </div>
 
         <div class="flex-none">
-            <span
-                class="tooltip tooltip-bottom"
-                data-tip="Coming soon"
+            <template x-if="currentRoute === 'forum'">
+                <a
+                    x-show="user.role === 'moderator'"
+                    href="{{ route('moderator.panel') }}"
+                    class="btn btn-soft btn-secondary"
+                >
+                    Moderator Panel
+                </a>
+            </template>
+
+            <template x-if="currentRoute === 'forum'">
+                <a
+                    x-show="user.role === 'master'"
+                    href="{{ route('master.panel') }}"
+                    class="btn btn-soft btn-secondary"
+                >
+                    Master Panel
+                </a>
+            </template>
+
+            <template
+                x-if="currentRoute === 'moderator.panel' || currentRoute === 'master.panel'"
             >
-                <template x-if="user.role === 'moderator'">
-                    <a
-                        href="/moderator-panel"
-                        class="btn btn-soft btn-secondary"
-                        disabled
-                    >
-                        Moderator Panel
-                    </a>
-                </template>
-                <template x-if="user.role === 'master'">
-                    <a
-                        href="/master-panel"
-                        class="btn btn-soft btn-secondary"
-                        disabled
-                    >
-                        Master Panel
-                    </a>
-                </template>
-            </span>
+                <a
+                    href="{{ route('forum') }}"
+                    class="btn btn-soft btn-primary"
+                >Forum</a>
+            </template>
+
 
             <x-theme-controller />
 
