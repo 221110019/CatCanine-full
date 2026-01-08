@@ -15,7 +15,7 @@ class LoginForm extends Component
     {
         $user = User::where('email', $this->email)->first();
         if (!$user || $user->isBanned()) {
-            session()->flash('message', 'Your account is banned.');
+            session()->flash('message', 'Your account has been banned.');
             return;
         }
         if (Auth::attempt([
