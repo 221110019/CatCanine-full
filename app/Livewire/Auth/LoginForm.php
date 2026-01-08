@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -12,6 +13,11 @@ class LoginForm extends Component
 
     public function login()
     {
+        $user = User::where('email', $this->email)->first();
+        if (!$user || $user->isBanned()) {
+            session()->flash('message', 'Your account is banned.');
+            return;
+        }
         if (Auth::attempt([
             'email' => $this->email,
             'password' => $this->password,

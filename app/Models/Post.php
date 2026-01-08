@@ -5,10 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-<<<<<<< Updated upstream
-use Illuminate\Support\Facades\Storage;
-=======
->>>>>>> Stashed changes
 
 class Post extends Model
 {

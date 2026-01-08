@@ -11,8 +11,6 @@ class UserReport extends Model
         'reported_id',
         'post_id',
     ];
-<<<<<<< Updated upstream
-=======
     public function reporter()
     {
         return $this->belongsTo(User::class, 'reporter_id');
@@ -22,5 +20,4 @@ class UserReport extends Model
     {
         return $this->belongsTo(User::class, 'reported_id');
     }
->>>>>>> Stashed changes
 }

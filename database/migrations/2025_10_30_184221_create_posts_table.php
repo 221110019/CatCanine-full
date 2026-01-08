@@ -12,14 +12,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->text('caption');
             $table->string('picture')->nullable();
-<<<<<<< Updated upstream
-<<<<<<< HEAD
             $table->string('type')->nullable();
-=======
->>>>>>> bd61f0cefcf520b4ea6cd7199fba02ccde41c8bc
-=======
-            $table->string('type')->nullable();
->>>>>>> Stashed changes
             $table->unsignedInteger('likes_count')->default(0);
             $table->unsignedInteger('reports_count')->default(0);
             $table->softDeletes();
