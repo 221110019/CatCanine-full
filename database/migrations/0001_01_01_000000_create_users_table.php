@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default('user');
+            $table->boolean('is_banned')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -32,12 +34,22 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('user_reports', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('reporter_id');
+            $table->unsignedBigInteger('reported_id');
+            $table->unsignedBigInteger('post_id');
+            $table->unique(['reporter_id', 'reported_id', 'post_id']);
+            $table->timestamps();
+        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('user_reports');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
