@@ -13,7 +13,7 @@ Route::post('/logout', function () {
     return redirect()->route('login');
 })->name('logout');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'check.banned'])->group(function () {
     Route::get('/forum', [ForumController::class, 'index'])->name('forum');
     Route::get('/moderator-panel', function () {
         return view('moderator-panel');

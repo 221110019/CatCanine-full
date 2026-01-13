@@ -4,9 +4,9 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     server: {
-        host: "catcanine-full.test",
+        host: "catcanine-full.v",
         hmr: {
-            host: "catcanine-full.test",
+            host: "catcanine-full.v",
         },
     },
     plugins: [
