@@ -16,7 +16,7 @@
                 <a
                     x-show="user.role === 'moderator'"
                     href="{{ route('moderator.panel') }}"
-                    class="btn btn-soft btn-secondary"
+                    class="btn btn-outline btn-secondary"
                 >
                     Moderator Panel
                 </a>
@@ -26,7 +26,7 @@
                 <a
                     x-show="user.role === 'master'"
                     href="{{ route('master.panel') }}"
-                    class="btn btn-soft btn-secondary"
+                    class="btn btn-outline btn-secondary"
                 >
                     Master Panel
                 </a>

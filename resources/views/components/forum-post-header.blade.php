@@ -11,9 +11,12 @@
                 $post->user_id === auth()->id()
                     ? 'before:content-["►"] after:content-["◄"]'
                     : '';
+            $isBanned = $post->user->isBanned() ? 'text-error opacity-30' : '';
+
         @endphp
 
-        <p class="font-bold {{ $roleFont }} {{ $isSelf }}">
+        <p
+            class="font-bold {{ $roleFont }} {{ $isSelf }} {{ $isBanned }}">
             {{ $post->user->name }}
         </p>
 
