@@ -10,9 +10,15 @@ class CheckBanned
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->is_banned) {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        if (Auth::user()->is_banned) {
             Auth::logout();
-            return redirect()->route('login')->with('message', 'Your account has been banned.');
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('login');
         }
 
         return $next($request);
