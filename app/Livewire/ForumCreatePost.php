@@ -16,14 +16,14 @@ class ForumCreatePost extends Component
     public $type = null;
     protected $rules = [
         'caption' => 'required|max:120',
-        'picture' => 'nullable|image|mimes:jpg,webp,jpeg,png|max:2048',
+        'picture' => 'nullable|image|mimes:jpg,webp,jpeg,png|max:10240',
         'type'    => 'nullable|in:cat,dog',
     ];
 
     public function createPost()
     {
         if (!Auth::check()) {
-            session()->flash('error', 'Please log in first.');
+            $this->dispatch('toast', ['message' => 'Please log in first.', 'type' => 'error']);
             return;
         }
 
@@ -41,6 +41,7 @@ class ForumCreatePost extends Component
         ]);
 
         $this->dispatch('postAdded');
+        $this->dispatch('toast', ['message' => 'Post created.', 'type' => 'success']);
         $this->reset(['caption', 'picture', 'type']);
         $this->resetErrorBag();
         $this->resetValidation();

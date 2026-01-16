@@ -20,7 +20,6 @@
 <body class="flex justify-center items-center">
     <div class="w-full max-w-md  min-h-screen">
         <x-forum-navbar></x-forum-navbar>
-        {{-- <livewire:forum-create-post /> --}}
         <div class="divider divider-primary w-full">
             <x-lucid iconName="paw-print" />
         </div>

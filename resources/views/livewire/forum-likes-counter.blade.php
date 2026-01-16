@@ -3,7 +3,7 @@
                             <button
                                 wire:click="toggleLike"
                                 data-tip="Like"
-                                class=" tooltip tooltip-left btn {{ $liked ? 'btn-error' : '' }}"
+                                class=" tooltip tooltip-left btn {{ $liked ? 'btn-error' : 'btn-neutral' }}"
                             >
                                 {{ $likesCount }}
                             </button>

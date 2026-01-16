@@ -35,7 +35,6 @@
                 name="logo_tabs"
                 class="tab text-center"
                 aria-label="About Us"
-                checked="checked"
             />
             @php
                 $paragraphs = [
@@ -66,6 +65,25 @@
                 type="radio"
                 name="logo_tabs"
                 class="tab"
+                aria-label="Role Indicator"
+                checked="checked"
+            />
+            <div
+                class="tab-content bg-base-100 border-base-300 p-6 text-center font-bold">
+                <div class="italic text-shadow-lg text-shadow-primary">Master
+                </div>
+                <div class="text-shadow-lg/50 text-shadow-secondary">
+                    Moderators</div>
+                <div class='before:content-["►"] after:content-["◄"]'>Current
+                    User</div>
+                <div>Regular User</div>
+                <div class="text-error opacity-30">Banned User</div>
+            </div>
+
+            <input
+                type="radio"
+                name="logo_tabs"
+                class="tab"
                 aria-label="Rules"
             />
             @php
@@ -88,6 +106,7 @@
                     @endforeach
                 </ol>
             </div>
+
         </div>
 
         <div class="modal-action">

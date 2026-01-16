@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function isBanned(): bool
     {
-        return $this->is_banned;
+        return (bool) $this->is_banned;
     }
     public function isReportable(): bool
     {

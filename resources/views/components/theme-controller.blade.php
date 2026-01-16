@@ -10,12 +10,12 @@
     />
 
     <x-lucid
-        class="swap-off"
-        iconName="sun"
-    ></x-lucid>
-    <x-lucid
         class="swap-on"
         iconName="moon"
+    ></x-lucid>
+    <x-lucid
+        class="swap-off"
+        iconName="sun"
     ></x-lucid>
 </label>
 

@@ -8,7 +8,6 @@ use App\Models\UserReport;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class ForumPage extends Component
 {
@@ -78,6 +77,8 @@ class ForumPage extends Component
 
         if (trim($this->editingCaption) === trim($post->caption)) {
             $this->cancelEdit();
+            $this->dispatch('toast', ['message' => 'No changes detected.', 'type' => 'info']);
+
             return;
         }
 
@@ -89,6 +90,7 @@ class ForumPage extends Component
             'caption' => $this->editingCaption
         ]);
 
+        $this->dispatch('toast', ['message' => 'Post updated.', 'type' => 'warning']);
         $this->cancelEdit();
     }
 
@@ -105,7 +107,7 @@ class ForumPage extends Component
         if (!$post || $post->user_id !== Auth::id()) return;
 
         $post->update(['status' => 'archived']);
-        $this->dispatch('$refresh');
+        $this->dispatch('toast', ['message' => 'Post deleted.', 'type' => 'error']);
     }
 
     public function reportPost($postId)
@@ -127,8 +129,7 @@ class ForumPage extends Component
         $post->update(['status' => 'reported']);
         $post->timestamps = true;
 
-        session()->flash('message', 'Reported.');
-        $this->dispatch('$refresh');
+        $this->dispatch('toast', ['message' => 'Post reported.', 'type' => 'error']);
     }
     public function reportUser($postId)
     {
@@ -150,7 +151,6 @@ class ForumPage extends Component
             'post_id'     => $postId,
         ]);
 
-        session()->flash('message', 'User reported.');
-        $this->dispatch('$refresh');
+        $this->dispatch('toast', ['message' => 'User reported.', 'type' => 'soft']);
     }
 }

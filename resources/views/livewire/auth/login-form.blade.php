@@ -1,6 +1,6 @@
 <section>
     <form wire:submit.prevent="login">
-        <label class="input validator input-neutral text-primary w-full">
+        <label class="input validator input-neutral text-primary-content w-full">
             <x-lucid iconName="mail" />
             <input
                 type="email"
@@ -16,7 +16,9 @@
             Enter valid email address
         </div>
 
-        <label class="mt-3 validator input input-neutral text-primary w-full">
+        <label
+            class="mt-3 validator input input-neutral text-primary-content w-full"
+        >
             <x-lucid iconName="key-round" />
             <input
                 type="password"
@@ -32,7 +34,7 @@
             Enter valid password
         </div>
 
-        <button class="btn btn-neutral mt-3 w-full">
+        <button class="btn btn-primary mt-3 w-full">
             <x-lucid iconName="log-in" /> Login
         </button>
 

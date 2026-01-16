@@ -14,10 +14,16 @@ class LoginForm extends Component
     public function login()
     {
         $user = User::where('email', $this->email)->first();
-        if (!$user || $user->isBanned()) {
+        if (!$user) {
+            session()->flash('message', 'Account not found.');
+            return;
+        }
+
+        if ($user->isBanned()) {
             session()->flash('message', 'Your account has been banned.');
             return;
         }
+
         if (Auth::attempt([
             'email' => $this->email,
             'password' => $this->password,

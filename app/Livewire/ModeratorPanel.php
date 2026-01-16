@@ -35,6 +35,7 @@ class ModeratorPanel extends Component
         ]);
 
         PostReport::where('post_id', $postId)->delete();
+        $this->dispatch('toast', ['message' => 'Post ARCHIVED by Moderator.', 'type' => 'error']);
     }
 
     public function dismiss($postId)
@@ -45,5 +46,6 @@ class ModeratorPanel extends Component
         ]);
 
         PostReport::where('post_id', $postId)->delete();
+        $this->dispatch('toast', ['message' => 'Report DISMISSED by Moderator.', 'type' => 'info']);
     }
 }
