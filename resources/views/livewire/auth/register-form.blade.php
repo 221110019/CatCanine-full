@@ -1,6 +1,6 @@
 <section>
     <form wire:submit.prevent="register">
-        <label class="input input-neutral text-primary w-full">
+        <label class="input input-neutral text-primary-content w-full">
             <x-lucid iconName="at-sign" />
             <input
                 type="text"
@@ -12,7 +12,7 @@
             />
         </label>
 
-        <label class="mt-3 input  input-neutral text-primary w-full">
+        <label class="mt-3 input  input-neutral text-primary-content w-full">
             <x-lucid iconName="mail" />
             <input
                 type="email"
@@ -24,7 +24,7 @@
             />
         </label>
 
-        <label class="mt-3 input  input-neutral text-primary w-full">
+        <label class="mt-3 input  input-neutral text-primary-content w-full">
             <x-lucid iconName="key-round" />
             <input
                 type="password"
@@ -40,7 +40,7 @@
 
         <button
             type="submit"
-            class="btn btn-neutral mt-3 w-full"
+            class="btn btn-primary mt-3 w-full"
         >
             <x-lucid iconName="user-round-plus" /> Register
         </button>

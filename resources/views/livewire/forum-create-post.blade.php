@@ -48,7 +48,7 @@
                     <div class="mb-4">
                         <select
                             wire:model="type"
-                            class="select select-bordered w-full"
+                            class="select text-primary-content select-bordered w-full"
                         >
                             <option value="">Select type (optional)
                             </option>
@@ -71,7 +71,7 @@
                             <input
                                 type="file"
                                 wire:model="picture"
-                                accept=".jpg,.webp"
+                                accept=".jpg,.webp,.png,.jpeg"
                                 class="hidden"
                             >
                         </label>

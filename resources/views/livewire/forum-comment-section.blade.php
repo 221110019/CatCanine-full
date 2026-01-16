@@ -18,9 +18,15 @@
                 $comment->user_id === auth()->id()
                     ? 'before:content-["►"] after:content-["◄"]'
                     : '';
+            $isBanned = $comment->user->isBanned()
+                ? 'text-error opacity-30'
+                : '';
+
         @endphp
         <p>
-            <span class="font-semibold {{ $roleFont }} {{ $isSelf }}">
+            <span
+                class="font-semibold {{ $roleFont }} {{ $isSelf }} {{ $isBanned }}"
+            >
                 {{ $comment->user->name }}
             </span>
             : {{ $comment->content }}

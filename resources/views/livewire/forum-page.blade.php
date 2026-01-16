@@ -1,7 +1,6 @@
         <div>
             <livewire:forum-create-post />
             <div class="card mb-8 min-h-screen">
-                {{-- Filter Buttons --}}
                 <div class="flex gap-2 mb-4 justify-center">
                     @php
                         $parameters = [
@@ -22,32 +21,29 @@
                         </button>
                     @endforeach
                 </div>
-                {{-- Search --}}
                 <x-forum-search-bar />
                 <span class="align-center opacity-35 text-sm text-right">Show
                     {{ $posts->count() }}
                     post(s)</span>
-                {{-- Posts --}}
                 @forelse ($posts as $post)
                     <div
-                        class="card border-primary border-l mb-3"
+                        class="card border-primary border-l border-b mb-1"
                         wire:key="post-{{ $post->id }}"
                     >
                         <div class="card-body">
-                            {{-- Author --}}
                             <x-forum-post-header :post="$post" />
-                            {{-- Caption + Edit Mode --}}
-                            <div class="p-2 rounded-sm bg-base-300">
+                            <div class="p-2 rounded-sm bg-base-200">
                                 @if ($editingPostId === $post->id)
                                     <textarea
                                         wire:model="editingCaption"
-                                        class="textarea textarea-bordered w-full"
-                                        rows="3"
+                                        class="validator textarea textarea-primary text-primary-content h-24 mb-4 w-full @error('caption')textarea-error @enderror"
+                                        maxlength="120"
+                                        required
                                     ></textarea>
                                     <div class="flex gap-2 mt-2">
                                         <button
                                             wire:click="updatePost({{ $post->id }})"
-                                            class="btn btn-success btn-sm"
+                                            class="btn btn-warning btn-sm"
                                         >
                                             Save
                                         </button>
@@ -73,12 +69,10 @@
                                     @endif
                                 @endif
                             </div>
-                            {{-- Likes --}}
                             <livewire:forum-likes-counter
                                 :post="$post->id"
                                 :wire:key="'likes-'.$post->id"
                             />
-                            {{-- Comments --}}
                             @livewire('forum-comment-section', ['post' => $post], key('comments-' . $post->id))
                         </div>
                     </div>
