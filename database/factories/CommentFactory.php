@@ -44,10 +44,10 @@ class CommentFactory extends Factory
         ];
 
 
-        $content = match (fake()->randomElement(['support', 'attack', 'neutral'])) {
-            'support' => fake()->randomElement($support),
-            'attack' => fake()->randomElement($attack),
-            default => fake()->randomElement($neutral),
+        $content = match ($this->faker->randomElement(['support', 'attack', 'neutral'])) {
+            'support' => $this->faker->randomElement($support),
+            'attack' => $this->faker->randomElement($attack),
+            default => $this->faker->randomElement($neutral),
         };
 
         return [
