@@ -37,7 +37,4 @@ RUN mkdir -p storage bootstrap/cache \
  && chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
-USER www-data
-
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["sh", "-c", "php-fpm8.3 && nginx -g 'daemon off;'"]

@@ -28,19 +28,8 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              echo "Starting Laravel..."
-
-              # Wait for MySQL
               echo "Waiting for MySQL..."
               until nc -z mysql 3306; do sleep 2; done
-              echo "MySQL is ready!"
 
-              # Fix permissions
-              echo "Fixing permissions..."
-              chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-              chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-              # Start PHP-FPM and Nginx
-              echo "Starting services..."
-              php-fpm8.3 &
-              nginx -g 'daemon off;'
+              php artisan migrate --force
+              php artisan db:seed --force
