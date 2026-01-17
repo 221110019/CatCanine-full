@@ -13,12 +13,9 @@ class CommentFactory extends Factory
 
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first();
-        if (!$user) {
-            return [];
-        }
+        $user = User::inRandomOrder()->first() ?: User::factory()->create();
+        $post = Post::inRandomOrder()->first() ?: Post::factory()->create();
 
-        $post = Post::inRandomOrder()->firstOrFail();
 
         $support = [
             'Yeah, I’ve seen the same with my pet.',

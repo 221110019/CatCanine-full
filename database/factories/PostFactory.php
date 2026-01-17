@@ -14,7 +14,7 @@ class PostFactory extends Factory
     {
         $user = User::inRandomOrder()->first();
         if (!$user) {
-            return [];
+            $user = User::factory()->create();
         }
 
 

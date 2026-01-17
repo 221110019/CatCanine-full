@@ -13,8 +13,9 @@ class PostLikeFactory extends Factory
 
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first();
-        $post = Post::inRandomOrder()->first();
+        $user = User::inRandomOrder()->first() ?: User::factory()->create();
+        $post = Post::inRandomOrder()->first() ?: Post::factory()->create();
+
 
         return [
             'user_id' => $user?->id ?? User::factory(),

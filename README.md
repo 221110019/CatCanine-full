@@ -15,6 +15,10 @@ docker images
 kubectl delete pod -l app=laravel
 kubectl get pods -w
 
+kubectl port-forward service/laravel 8080:80
+
+---
+
 # Option:
 
 - Only run Web App using Docker Image (ViewOnly, tanpa source code):

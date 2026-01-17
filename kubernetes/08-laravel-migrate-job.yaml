@@ -18,7 +18,7 @@ spec:
               echo "Waiting for MySQL..."
               until nc -z mysql 3306; do sleep 2; done
               echo "=== Laravel Setup Started ==="
-
+              php artisan session:table
               echo "1. Running database migrations..."
               php artisan migrate --force
 
