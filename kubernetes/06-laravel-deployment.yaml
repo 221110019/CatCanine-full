@@ -25,11 +25,4 @@ spec:
                 name: laravel-config
             - secretRef:
                 name: laravel-secret
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              echo "Waiting for MySQL..."
-              until nc -z mysql 3306; do sleep 2; done
-
-              php artisan migrate --force
-              php artisan db:seed --force
+          command: ["/entrypoint.sh"]

@@ -7,20 +7,17 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-namespace Database\Factories;
-
-use App\Models\Comment;
-use App\Models\Post;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 class CommentFactory extends Factory
 {
     protected $model = Comment::class;
 
     public function definition(): array
     {
-        $user = User::inRandomOrder()->firstOrFail();
+        $user = User::inRandomOrder()->first();
+        if (!$user) {
+            return [];
+        }
+
         $post = Post::inRandomOrder()->firstOrFail();
 
         $support = [

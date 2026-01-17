@@ -12,7 +12,11 @@ class PostFactory extends Factory
 
     public function definition()
     {
-        $user = User::inRandomOrder()->firstOrFail();
+        $user = User::inRandomOrder()->first();
+        if (!$user) {
+            return [];
+        }
+
 
         $type = $this->faker->randomElement(['cat', 'dog']);
 

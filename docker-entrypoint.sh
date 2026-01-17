@@ -15,23 +15,21 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 cd /var/www/html
 
-# Create minimal cached config so Laravel boots
-cat > bootstrap/cache/config.php << 'CONFIG'
-<?php return [
-  'app' => [
-    'key' => getenv('APP_KEY'),
-    'cipher' => 'AES-256-CBC',
-    'name' => 'Laravel',
-    'env' => 'production',
-    'debug' => false,
-  ],
-];
-CONFIG
+# Clear old caches
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
 
+# Rebuild caches properly
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Ensure storage link exists
 php artisan storage:link --force || true
 
 echo "Starting services..."
-service php8.3-fpm start
-service nginx start
-
-tail -f /var/log/nginx/access.log
+# Run in foreground
+php-fpm8.3 -F &
+nginx -g "daemon off;"
