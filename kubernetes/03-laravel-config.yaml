@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laravel-config
+data:
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_KEY: "base64:wT638ZTvxLOS+gYTTJ5BgVHzJT7iBSbz+8malCag/n0="
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: "3306"
+  DB_DATABASE: laravel
+  DB_USERNAME: laravel
+  DB_PASSWORD: laravelpass
+  CACHE_DRIVER: file
+  SESSION_DRIVER: database
+  SESSION_CONNECTION: mysql
+  QUEUE_CONNECTION: sync

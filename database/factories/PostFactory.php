@@ -12,9 +12,13 @@ class PostFactory extends Factory
 
     public function definition()
     {
-        $user = User::inRandomOrder()->firstOrFail();
+        $user = User::inRandomOrder()->first();
+        if (!$user) {
+            $user = User::factory()->create();
+        }
 
-        $type = fake()->randomElement(['cat', 'dog']);
+
+        $type = $this->faker->randomElement(['cat', 'dog']);
 
         $catPosts = [
             'Anyone else have a cat that refuses cheap food?',
@@ -39,8 +43,8 @@ class PostFactory extends Factory
             'user_id' => $user->id,
             'type' => $type,
             'caption' => $type === 'cat'
-                ? fake()->randomElement($catPosts)
-                : fake()->randomElement($dogPosts),
+                ? $this->faker->randomElement($catPosts)
+                : $this->faker->randomElement($dogPosts),
             'picture' => null,
             'likes_count' => 0,
             'reports_count' => 0,

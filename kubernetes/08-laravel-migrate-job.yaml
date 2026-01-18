@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: laravel-setup
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: setup
+          image: devops-laravel:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Waiting for MySQL..."
+              until nc -z mysql 3306; do sleep 2; done
+              echo "=== Laravel Setup Started ==="
+              php artisan session:table
+              echo "1. Running database migrations..."
+              php artisan migrate --force
+
+              echo "2. Running seeders..."
+              php artisan db:seed --force
+
+              echo "3. Creating storage link..."
+              php artisan storage:link --force
+
+              echo "4. Clearing caches..."
+              php artisan config:clear
+              php artisan cache:clear
+              php artisan view:clear
+              php artisan route:clear
+
+              echo "5. Caching configuration for production..."
+              php artisan config:cache
+              php artisan route:cache
+              php artisan view:cache
+
+              echo "6. Setting permissions..."
+              chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+              chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+              echo "=== Laravel Setup Complete ==="
+          envFrom:
+            - configMapRef:
+                name: laravel-config
+            - secretRef:
+                name: laravel-secret

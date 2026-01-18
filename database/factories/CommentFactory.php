@@ -7,21 +7,15 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-namespace Database\Factories;
-
-use App\Models\Comment;
-use App\Models\Post;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 class CommentFactory extends Factory
 {
     protected $model = Comment::class;
 
     public function definition(): array
     {
-        $user = User::inRandomOrder()->firstOrFail();
-        $post = Post::inRandomOrder()->firstOrFail();
+        $user = User::inRandomOrder()->first() ?: User::factory()->create();
+        $post = Post::inRandomOrder()->first() ?: Post::factory()->create();
+
 
         $support = [
             'Yeah, I’ve seen the same with my pet.',
@@ -44,10 +38,10 @@ class CommentFactory extends Factory
         ];
 
 
-        $content = match (fake()->randomElement(['support', 'attack', 'neutral'])) {
-            'support' => fake()->randomElement($support),
-            'attack' => fake()->randomElement($attack),
-            default => fake()->randomElement($neutral),
+        $content = match ($this->faker->randomElement(['support', 'attack', 'neutral'])) {
+            'support' => $this->faker->randomElement($support),
+            'attack' => $this->faker->randomElement($attack),
+            default => $this->faker->randomElement($neutral),
         };
 
         return [
