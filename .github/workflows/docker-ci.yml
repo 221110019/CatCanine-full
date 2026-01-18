@@ -2,7 +2,7 @@ name: Deploy Laravel
 
 on:
   push:
-    branches: [dev]
+    branches: [k8s]
 
 jobs:
   build:
