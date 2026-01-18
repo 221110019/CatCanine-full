@@ -1,4 +1,4 @@
-name: CI/CD - Build and Push Docker Image
+name: CI - Build and Push Docker Image
 
 on:
   push:
@@ -29,3 +29,30 @@ jobs:
           tags: 221110019/devops-laravel:latest
           cache-from: type=registry,ref=221110019/devops-laravel:cache
           cache-to: type=inline
+      - name: Clean old Docker images
+        run: |
+          docker image prune -af || true
+
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.29.0
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+
+      - name: Deploy to Minikube
+        run: |
+          kubectl set image deployment/laravel laravel=221110019/devops-laravel:latest
+          kubectl rollout status deployment/laravel
