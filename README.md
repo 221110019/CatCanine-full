@@ -1,141 +1,179 @@
-# 1. Make sure Docker is pointing to Minikube
+# Required Tools
 
-eval $(minikube -p minikube docker-env)
-
-# 2. Rebuild the image explicitly without BuildKit
-
-DOCKER_BUILDKIT=0 docker build -t devops-laravel:latest .
-
-# 3. Verify it exists inside Minikube's Docker
-
-docker images
-
-# 4. Deploy in Kubernetes
-
-kubectl delete pod -l app=laravel
-kubectl get pods -w
-
-kubectl port-forward service/laravel 8080:80
+- Ubuntu
+- Docker
+- kubectl
+- minikube:
+    - addons metrics-server
 
 ---
 
-# Option:
+# 1. Hub / CI-CD
 
-- Only run Web App using Docker Image (ViewOnly, tanpa source code):
-    - Repository: `https://github.com/221110019/CatCanine-ViewOnly.git`
-- With Project Source Code + using Laravel Sail to integrate with Docker
-    - Repository: `https://github.com/221110019/CatCanine-full.git`
-
-# Requirement (Window)
-
-- Docker Desktop running with WSL2 integration enabled
-- WSL2 engine (sebaiknya Ubuntu)
-- Sebaiknya run command dengan terminal Ubuntu (bukan Powershell etc), performa lebih cepat
-
-# [OPTION 1] Docker Image, no source code
-
-- Harus Install Docker Desktop dan WSL2 (disarankan Ubuntu)
-- Docker Desktop with WSL2 engine integration enabled pada setting
-- Buka terminal Ubuntu
-- (opsional) cd ke path folder
-
-```bash
-git clone https://github.com/221110019/CatCanine-ViewOnly.git
-```
-
-- cd ke folder clone
-- Pull build image terbaru dari Docker Hub
-
-```bash
-docker compose pull
-```
-
-- Start
-
-```bash
-docker compose up
-atau
-docker compose up -d
-```
-
-- Akses web app di http://localhost
-
-- Stop
-
-```bash
-docker compose stop
-```
-
-- Stop and remove container
-
-```bash
-docker compose down
-```
-
-- Remove all container, volume, and image
-
-```bash
-docker container prune -f
-docker volume prune -a -f
-docker system prune -a -f
-```
-
-# [OPTION 2] Laravel Sail, with source code
-
-- Locate ke path folder
+Clone GitHub
 
 ```bash
 git clone https://github.com/221110019/CatCanine-full.git
+cd CatCanine-full
+
 ```
 
-- cd ke folder clone
+Start Minikube
 
 ```bash
-cp .env.example .env
+minikube start --driver=docker
+minikube dashboard &
 ```
 
-- install composer
+Pull Latest Image
 
 ```bash
-docker run --rm \
-  -u "$(id -u):$(id -g)" \
-  -v $(pwd):/var/www/html \
-  -w /var/www/html \
-  laravelsail/php82-composer:latest \
-  composer install
+docker pull 221110019/devops-laravel:latest
 ```
 
-- (opsional agar memudahkan run command `./vendor/bin/sail`), jadi tinggal ganti `./vendor/bin/sail` menjadi `sail`
+Apply Kubernetes Resources
 
 ```bash
-echo "alias sail='bash vendor/bin/sail'" >> ~/.bashrc
-source ~/.bashrc
+kubectl apply -f kubernetes/
+kubectl get pods -w
 ```
 
-- Start sail
+Access APP URL
 
 ```bash
-./vendor/bin/sail up -d
-# or with alias
-sail up -d
+minikube service laravel --url
+
 ```
 
-- Access app at http://localhost
-- Build front-end, Sail harus running
+# 2. Local (Minikube)
+
+Start Minikube
 
 ```bash
-./vendor/bin/sail npm install
-./vendor/bin/sail npm run build
+minikube start --driver=docker
+minikube status
 ```
 
-- Database Migration, Sail harus running
+Build Docker Image
 
 ```bash
-./vendor/bin/sail artisan migrate
-./vendor/bin/sail artisan db:seed
-./vendor/bin/sail artisan storage:link
+eval $(minikube docker-env)
+DOCKER_BUILDKIT=0 docker build -t devops-laravel:latest .
+docker images
 ```
 
-# CI/CD
+Apply Kubernetes
 
-> Triggered by push to master
+```bash
+kubectl apply -f kubernetes/
+kubectl get pods -w
+kubectl get svc
+kubectl logs -f <pod_name>
+
+```
+
+APP URL
+
+```bash
+minikube service laravel --url
+#atau
+kubectl port-forward service/laravel 8080:80
+```
+
+Horizontal Pod Autoscaler & dashboard
+
+```bash
+kubectl get hpa -w
+kubectl top pods
+kubectl top nodes
+
+minikube dashboard &
+watch -n 10 "kubectl get pods,hpa && echo --- && kubectl top pods"
+
+```
+
+Close & Reproduce
+
+```bash
+kubectl delete -f kubernetes/
+minikube delete
+minikube start
+kubectl apply -f kubernetes/
+kubectl get pods -w
+
+```
+
+# Others
+
+Remove Unused Images
+
+```bash
+docker image prune -f
+```
+
+Stop Laravel deployment (keeps MySQL)
+
+```bash
+kubectl delete deployment laravel
+```
+
+Stop Laravel service
+
+```bash
+kubectl delete service laravel
+```
+
+Stop Laravel PVC
+
+```bash
+kubectl delete pvc laravel-storage
+```
+
+Delete all Laravel resources
+
+```bash
+kubectl delete -f kubernetes/ --ignore-not-found=true
+```
+
+Delete by label
+
+```bash
+kubectl delete all -l app=laravel
+kubectl delete pvc -l app=laravel 2>/dev/null || true
+```
+
+Pause Minikube (keeps state)
+
+```bash
+minikube pause
+```
+
+Stop Minikube
+
+```bash
+minikube stop
+```
+
+Delete everything
+
+```bash
+minikube delete
+```
+
+# Note
+
+## Horizontal Pod Scaler
+
+- addons metrics-server
+- Stress Test: membuat pod baru jika overload (success)
+- Perlu tunggu 1-2 menit
+- Stress Test `kubectl run test --image=busybox --rm -it -- sh -c 'while true; do curl http://laravel/; sleep 1; done'`
+
+# CI/CD Kubernetes
+
+- cat ~/.kube/config -> KUBE_CONFIG GitHub Secret
+
+# Monitoring Tools
+
+- addons metrics-server (cocok)
+- Prometheus+Grafana (heavy)
