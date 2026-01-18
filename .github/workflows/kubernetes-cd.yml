@@ -2,7 +2,7 @@ name: CD - Kubernetes (Kind)
 
 on:
   workflow_run:
-    workflows: ["CI - Build and Push Docker Image"]
+    workflows: ["CI - Build and Push Image"]
     types: [completed]
 
 jobs:
@@ -22,3 +22,7 @@ jobs:
           kubectl apply -f kubernetes/
           kubectl set image deployment/laravel-deployment laravel=221110019/devops-laravel:${{ github.event.workflow_run.head_sha }}
           kubectl rollout status deployment/laravel-deployment --timeout=120s
+      - name: Cleanup
+        run: |
+          docker image prune -af
+
