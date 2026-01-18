@@ -42,7 +42,6 @@ Access APP URL
 
 ```bash
 minikube service laravel --url
-
 ```
 
 # 2. Local (Minikube)
@@ -80,9 +79,11 @@ minikube service laravel --url
 kubectl port-forward service/laravel 8080:80
 ```
 
-Horizontal Pod Autoscaler & dashboard
+Horizontal Pod Autoscaler (tunggu 1-2 menit) & dashboard
 
 ```bash
+minikube addons enable metrics-server
+minikube addons list
 kubectl get hpa -w
 kubectl top pods
 kubectl top nodes
