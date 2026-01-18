@@ -40,5 +40,6 @@ jobs:
       - name: Deploy
         run: |
           kubectl apply -f kubernetes/
-          kubectl set image deployment/laravel-deployment laravel=221110019/devops-laravel:latest
-          kubectl rollout status deployment/laravel-deployment --timeout=120s
+          kubectl set image deployment/laravel laravel=221110019/devops-laravel:latest
+          kubectl rollout status deployment/laravel --timeout=120s
+
