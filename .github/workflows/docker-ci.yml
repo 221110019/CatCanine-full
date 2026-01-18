@@ -1,4 +1,4 @@
-name: CI - Build and Push Docker Image
+name: CI/CD - Build, Push, and Deploy to Minikube
 
 on:
   push:
@@ -6,8 +6,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -22,35 +21,24 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: 221110019/devops-laravel:latest
-          cache-from: type=registry,ref=221110019/devops-laravel:cache
-          cache-to: type=inline
-      - name: Clean old Docker images
         run: |
-          docker image prune -af || true
+          DOCKER_BUILDKIT=0 docker build -t 221110019/devops-laravel:latest .
+          docker push 221110019/devops-laravel:latest
 
+      - name: Clean old Docker images
+        run: docker image prune -af || true
 
   deploy:
     needs: build-and-push
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: v1.29.0
-
-      - name: Configure kubeconfig
+      - name: Ensure kubectl & Minikube
         run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+          minikube status
+          kubectl version --client
 
       - name: Deploy to Minikube
         run: |
