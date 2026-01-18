@@ -5,39 +5,34 @@ on:
     branches: [k8s]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Login to Docker
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: 221110019/devops-laravel:latest
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: 'latest'
-
-      - name: Setup kubeconfig (direct text)
         run: |
+          docker build -t 221110019/devops-laravel:latest .
+          docker push 221110019/devops-laravel:latest
+
+      - name: Setup kubectl and kubeconfig
+        run: |
+          # Install kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install kubectl /usr/local/bin/kubectl
+          
+          # Create kubeconfig from full content
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
-          chmod 600 ~/.kube/config
+          cat > ~/.kube/config << 'EOF'
+          ${{ secrets.KUBE_CONFIG_FULL }}
+          EOF
 
-      - name: Update deployment
+      - name: Simple deploy
         run: |
-          kubectl set image deployment/laravel laravel=221110019/devops-laravel:latest --record
+          # This doesn't change the image tag, but triggers a restart
+          kubectl rollout restart deployment/laravel
