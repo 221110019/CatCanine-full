@@ -25,11 +25,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: helm/kind-action@v1
+
+      - name: Create Kind cluster
+        uses: helm/kind-action@v1
+        with:
+          cluster_name: kind
+
       - name: Pull image
         run: docker pull 221110019/devops-laravel:latest
+
       - name: Load image
-        run: kind load docker-image 221110019/devops-laravel:latest
+        run: kind load docker-image 221110019/devops-laravel:latest --name kind
+
       - name: Deploy
         run: |
           kubectl apply -f kubernetes/
