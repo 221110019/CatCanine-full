@@ -32,12 +32,12 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Setup kubeconfig
+      - name: Setup kubeconfig (direct text)
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+          chmod 600 ~/.kube/config
 
       - name: Update deployment
         run: |
-          kubectl set image deployment/laravel laravel=221110019/devops-laravel:latest
-          kubectl rollout restart deployment/laravel
+          kubectl set image deployment/laravel laravel=221110019/devops-laravel:latest --record
