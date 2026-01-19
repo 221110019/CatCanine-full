@@ -10,7 +10,7 @@ spec:
         runAsUser: 0
       containers:
         - name: setup
-          image: 221110019/devops-laravel:latest
+          image: devops-laravel:latest
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
           args:

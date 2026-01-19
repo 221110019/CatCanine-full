@@ -16,7 +16,7 @@ spec:
         runAsUser: 0
       containers:
         - name: laravel
-          image: 221110019/devops-laravel:latest
+          image: devops-laravel:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
