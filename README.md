@@ -8,7 +8,7 @@
 
 ---
 
-# 1. Hub / CI-CD
+# 1. Image dari Docker Hub / CI-CD
 
 Clone GitHub
 
@@ -44,7 +44,7 @@ Access APP URL
 minikube service laravel --url
 ```
 
-# 2. Local (Minikube)
+# 2. Build Image Local
 
 Start Minikube
 
@@ -79,6 +79,8 @@ minikube service laravel --url
 kubectl port-forward service/laravel 8080:80
 ```
 
+# 3. HPA
+
 Horizontal Pod Autoscaler (tunggu 1-2 menit) & dashboard
 
 ```bash
@@ -112,37 +114,6 @@ Remove Unused Images
 docker image prune -f
 ```
 
-Stop Laravel deployment (keeps MySQL)
-
-```bash
-kubectl delete deployment laravel
-```
-
-Stop Laravel service
-
-```bash
-kubectl delete service laravel
-```
-
-Stop Laravel PVC
-
-```bash
-kubectl delete pvc laravel-storage
-```
-
-Delete all Laravel resources
-
-```bash
-kubectl delete -f kubernetes/ --ignore-not-found=true
-```
-
-Delete by label
-
-```bash
-kubectl delete all -l app=laravel
-kubectl delete pvc -l app=laravel 2>/dev/null || true
-```
-
 Pause Minikube (keeps state)
 
 ```bash
@@ -161,6 +132,13 @@ Delete everything
 minikube delete
 ```
 
+Hard reset all
+
+```bash
+minikube delete --all --purge
+docker system prune -af --volumes
+```
+
 # Note
 
 ## Horizontal Pod Scaler
@@ -170,11 +148,11 @@ minikube delete
 - Perlu tunggu 1-2 menit
 - Stress Test `kubectl run test --image=busybox --rm -it -- sh -c 'while true; do curl http://laravel/; sleep 1; done'`
 
-# CI/CD Kubernetes
+## CI/CD Kubernetes
 
 - cat ~/.kube/config -> KUBE_CONFIG GitHub Secret
 
-# Monitoring Tools
+## Monitoring Tools
 
 - addons metrics-server (cocok)
 - Prometheus+Grafana (heavy)
